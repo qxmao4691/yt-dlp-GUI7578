@@ -226,4 +226,25 @@ pyinstaller --onefile --windowed --name="yt-dlp视频下载器" yt_dlp_gui.py
 ```
 EXE 在 `dist` 目录中。用户仍需安装 FFmpeg（以及 4K 所需的 JS Runtime）。
 
----
+----------------------------------------------------------------------------------------------------------------------------------------
+yt-dlp 为啥突然要用 Deno？答案很简单：YouTube 下手太狠了。
+
+从 2025.11.12 版本开始，yt-dlp 想完整下载 YouTube，就必须依赖一个外部 JavaScript 运行时（Deno / Node / Bun 都行）。
+不是强制，但不用的话——格式受限、无法登录、还可能下载失败。
+
+为啥要上 JS 运行时？
+
+🔹 YouTube 这两年反爬虫升级得离谱，player 代码不仅混淆，还塞 AST 级“挑战”。
+🔹 yt-dlp 之前靠“正则模拟 JS”硬抗，能用但太难维护。
+🔹 2025 年 9 月后 YouTube 改动太深，老方法直接崩。
+🔹 团队于是推出 ejs 模块，让 yt-dlp 调用真实 JS 引擎执行 YouTube 的解密逻辑。
+
+一句话：
+不再硬写 JS 解释器，交给专业的运行时，省心又更稳。
+
+想继续无痛下载 YouTube？
+brew install deno
+
+装一个 JS runtime，就好了。
+
+如果觉得 yt-dlp 命令太麻烦，我看 github 有一个python 写的简单gui脚本，试用了下挺不错的https://github.com/sa23up/yt-dlp-GUI
